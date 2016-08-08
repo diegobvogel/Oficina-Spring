@@ -8,6 +8,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class Vinho {
@@ -16,15 +19,20 @@ public class Vinho {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
 	
+	@NotBlank(message = "Nome é obrigatório")
 	private String nome;
 	
+	@NotNull(message = "Tipo é obrigatório")
 	@Enumerated(EnumType.STRING)
 	private TipoVinho tipo;
 	
+	@NotNull(message = "Safra é obrigatória")
 	private Integer safra;
 	
+	@NotNull(message = "Volume é obrigatória")
 	private Integer volume;
 	
+	@NotNull(message = "Valor é obrigatória")
 	private BigDecimal valor;
 
 	// getterss and setters 

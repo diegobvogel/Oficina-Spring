@@ -1,14 +1,19 @@
 package com.algaworks.wine.controller;
 
-import java.util.List;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.algaworks.wine.model.TipoVinho;
 import com.algaworks.wine.model.Vinho;
 import com.algaworks.wine.repository.Vinhos;
+import com.algaworks.wine.service.CadastroVinhoService;
 
 @Controller
 @RequestMapping("/vinhos")
@@ -16,6 +21,9 @@ public class VinhoController {
 	
 	@Autowired
 	private Vinhos vinhos;
+	
+	@Autowired
+	private CadastroVinhoService cadastroVinhoService;
 
 	@RequestMapping
 	public ModelAndView pesquisa() {
@@ -25,8 +33,21 @@ public class VinhoController {
 	}
 	
 	@RequestMapping("/novo")
-	public String novo() {
-		return "/produto/CadastroProduto";
+	public ModelAndView novo(Vinho vinho) {
+		ModelAndView mv = new ModelAndView("/vinho/CadastroVinho");
+		mv.addObject("tipos", TipoVinho.values());
+		return mv;
+	}
+	
+	@RequestMapping(value = "/novo", method = RequestMethod.POST)
+	public ModelAndView salvar(@Valid Vinho vinho, BindingResult result, RedirectAttributes attributes) {
+		if (result.hasErrors()) {
+			return novo(vinho);
+		}
+		ModelAndView mv = new ModelAndView("redirect:/vinhos/novo");
+		cadastroVinhoService.salvar(vinho);
+		attributes.addFlashAttribute("mensagem", "Vinho salvo com sucesso!");
+		return mv;
 	}
 	
 }
