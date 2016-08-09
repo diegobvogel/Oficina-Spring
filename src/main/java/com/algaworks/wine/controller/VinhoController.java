@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -47,6 +48,13 @@ public class VinhoController {
 		ModelAndView mv = new ModelAndView("redirect:/vinhos/novo");
 		cadastroVinhoService.salvar(vinho);
 		attributes.addFlashAttribute("mensagem", "Vinho salvo com sucesso!");
+		return mv;
+	}
+	
+	@RequestMapping("/{codigo}")
+	public ModelAndView visualizar(@PathVariable("codigo") Vinho vinho){
+		ModelAndView mv = new ModelAndView("/vinho/VisualizacaoVinho");
+		mv.addObject("vinho", vinho);
 		return mv;
 	}
 	
